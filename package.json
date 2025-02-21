@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "openai": "^4.85.3"
+  },
+  "name": "lmstudio-web",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roanmorgan53/lmstudio-web.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roanmorgan53/lmstudio-web/issues"
+  },
+  "homepage": "https://github.com/roanmorgan53/lmstudio-web#readme",
+  "description": ""
+}

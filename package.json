@@ -1,13 +1,17 @@
 {
+  "type": "module",
   "dependencies": {
-    "openai": "^4.85.3"
+    "@lmstudio/sdk": "^0.4.7",
+    "lite-server": "^2.6.1",
+    "openai": "^4.85.4"
   },
   "name": "lmstudio-web",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run lite",
+    "lite": "lite-server"
   },
   "repository": {
     "type": "git",

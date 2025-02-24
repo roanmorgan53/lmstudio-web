@@ -10,7 +10,7 @@ async function postData(){
       "model": "gemma-2-2b-it",
       "messages": messageList,
       "temperature": 0.7,
-      "max_tokens": -1,
+      "max_tokens": 100,
       "stream": false
     };
 
@@ -32,12 +32,24 @@ async function postData(){
 }
 
 async function handleResponse() {
-  const reply = await postData(messageList);
+  const reply = await postData();
+  
+  // throw an error if we have problems
+  if (!reply || !reply.choices || reply.choices.length === 0 || !reply.choices[0].message) {
+    console.error("Invalid response from LLM:", reply);
+    return;
+  }
+
   const repliedMessage = reply.choices[0].message.content;
-  console.log(repliedMessage);
-  document.getElementById("output").textContent = repliedMessage;
+  console.log("AI Response:", repliedMessage);
+
+  // Convert Markdown to HTML using Marked.js
+  const outputElement = document.getElementById("output");
+  outputElement.innerHTML = marked.parse(repliedMessage);
+
   messageList.push({ "role": "assistant", "content": repliedMessage });
 }
+
 
 const messageList = [
   { "role": "system", "content": "You are a wizard from mordor"},

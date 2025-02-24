@@ -2,11 +2,14 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     margin-top: 50px;
+    background-color: rgb(10, 8, 11);
+    color: rgb(203, 203, 203);
 }
 
 input {
     padding: 10px;
     width: 200px;
+    background-color: rgb(203, 203, 203);
 }
 
 button {
@@ -14,7 +17,23 @@ button {
     margin-left: 10px;
 }
 
-p {
+#output {
     margin-top: 20px;
+    font-weight: bold;
+    border: 2px solid black;
+    min-height: 400px;
+    max-width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(203, 203, 203);
+    color: black;
+    text-align: left;
+    padding: 10px;
+}
+
+#label{
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
     font-weight: bold;
 }

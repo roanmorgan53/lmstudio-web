@@ -1,66 +1,103 @@
 const submitButton = document.getElementById("submitButton");
-const inputfield = document.getElementById("userInput");
+const inputField = document.getElementById("userInput");
+const chatContainer = document.getElementById("output");
 
+const messageList = [
+    { "role": "system", "content": "help me learn modern app development and full stack based on the T3 stack" },
+];
 
-async function postData(){
-  try {
-    let endpoint = "http://127.0.0.1:1234/v1/chat/completions";
+function addMessage(content, isUser = false) {
+    const messageDiv = document.createElement("div");
+    messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+    messageDiv.innerHTML = isUser ? content : marked.parse(content);
+    chatContainer.appendChild(messageDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+}
 
-    const data  = {
-      "model": "gemma-2-2b-it",
-      "messages": messageList,
-      "temperature": 0.7,
-      "max_tokens": 100,
-      "stream": false
-    };
+function addTypingIndicator() {
+    const indicator = document.createElement("div");
+    indicator.className = "typing-indicator";
+    indicator.innerHTML = '<span></span><span></span><span></span>';
+    chatContainer.appendChild(indicator);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    return indicator;
+}
 
-    const request = await fetch(endpoint, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
+async function postData() {
+    try {
+        let endpoint = "http://127.0.0.1:1234/v1/chat/completions";
 
-    const response = await request.json();
-    console.log(response);
-    return response;
-  } catch (error){
-    console.error("Error posting data:", error);
-  }
+        const data = {
+            "model": "gemma-2-2b-it",
+            "messages": messageList,
+            "temperature": 0.7,
+            "max_tokens": 500,
+            "stream": false
+        };
+
+        const request = await fetch(endpoint, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const response = await request.json();
+        console.log(response);
+        return response;
+    } catch (error) {
+        console.error("Error posting data:", error);
+        return null;
+    }
 }
 
 async function handleResponse() {
-  const reply = await postData();
-  
-  // throw an error if we have problems
-  if (!reply || !reply.choices || reply.choices.length === 0 || !reply.choices[0].message) {
-    console.error("Invalid response from LLM:", reply);
-    return;
-  }
+    const typingIndicator = addTypingIndicator();
+    
+    try {
+        const reply = await postData();
+        
+        // Remove typing indicator
+        typingIndicator.remove();
 
-  const repliedMessage = reply.choices[0].message.content;
-  console.log("AI Response:", repliedMessage);
+        if (!reply || !reply.choices || reply.choices.length === 0 || !reply.choices[0].message) {
+            console.error("Invalid response from LLM:", reply);
+            addMessage("Sorry, I encountered an error. Please try again.");
+            return;
+        }
 
-  // Convert Markdown to HTML using Marked.js
-  const outputElement = document.getElementById("output");
-  outputElement.innerHTML = marked.parse(repliedMessage);
+        const repliedMessage = reply.choices[0].message.content;
+        console.log("AI Response:", repliedMessage);
 
-  messageList.push({ "role": "assistant", "content": repliedMessage });
+        addMessage(repliedMessage, false);
+        messageList.push({ "role": "assistant", "content": repliedMessage });
+    } catch (error) {
+        console.error("Error handling response:", error);
+        typingIndicator.remove();
+        addMessage("Sorry, I encountered an error. Please try again.");
+    }
 }
 
-
-const messageList = [
-  { "role": "system", "content": "You are a wizard from mordor"},
-];
-
-function processNewMessage(){
-  console.log("Processing message");
-  const input = inputfield.value;
-  inputfield.value = "";
-  
-  messageList.push({"role": "user", "content": input});
-  handleResponse(messageList);
+function processNewMessage() {
+    const input = inputField.value.trim();
+    if (!input) return;
+    
+    inputField.value = "";
+    addMessage(input, true);
+    messageList.push({ "role": "user", "content": input });
+    handleResponse();
 }
+
+// Handle Enter key
+inputField.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        processNewMessage();
+    }
+});
+
+// Initial focus
+inputField.focus();
 

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Web App</title>
+    <title>LLM Chat Interface</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <h1>LLM REST API Interface</h1>
-    <input type="text" id="userInput" placeholder="Type something...">
-    <button id="submitButton" onclick="processNewMessage()">Submit</button>
-    <p id="output"></p>
-    <p id="label">AI Text</p>
+    <h1>LLM Chat Interface</h1>
+    <div id="output" class="chat-container"></div>
+    <div class="input-container">
+        <input type="text" id="userInput" placeholder="Type a message..." autocomplete="off">
+        <button id="submitButton" onclick="processNewMessage()">Send</button>
+    </div>
     <script src="dist/app.js"></script>
 </body>
 </html>

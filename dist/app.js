@@ -31,7 +31,7 @@ async function postData() {
             "model": "gemma-2-2b-it",
             "messages": messageList,
             "temperature": 0.7,
-            "max_tokens": 500,
+            "max_tokens": 200,
             "stream": false
         };
 

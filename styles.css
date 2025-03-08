@@ -80,6 +80,7 @@ button:active {
     gap: 16px;
     overflow-y: auto;
     height: calc(100vh - 200px);
+    text-align: left;
 }
 
 .message {
